@@ -13,6 +13,9 @@ const App: () => React$Node = () => {
 
   const loadToDoList = () => {
     DbHelper.get((items) => {
+      console.log(typeof items);
+      console.log(items);
+      items.forEach((it) => { console.log(it); })
       setToDos(items);
     });
   };

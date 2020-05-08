@@ -8,6 +8,9 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -16,6 +19,8 @@ import com.facebook.react.bridge.Callback;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DbModule extends ReactContextBaseJavaModule {
   private static ReactApplicationContext reactContext;
@@ -57,14 +62,20 @@ public class DbModule extends ReactContextBaseJavaModule {
     );
 
     List items = new ArrayList<>();
+    WritableArray returnArray = Arguments.createArray();
     while(cursor.moveToNext()) {
+      WritableMap map = Arguments.createMap();
+      int id = cursor.getInt(
+          cursor.getColumnIndexOrThrow(ToDoContract.ToDoEntry._ID));
       String description = cursor.getString(
           cursor.getColumnIndexOrThrow(ToDoContract.ToDoEntry.COLUMN_NAME_DESCRIPTION));
-      items.add(description);
+      map.putInt("id", id);
+      map.putString("description", description);
+      returnArray.pushMap(map);
     }
     cursor.close();
 
-    cb.invoke(items);
+    cb.invoke(returnArray);
 
     Toast.makeText(getReactApplicationContext(), "done", 1).show();
   }
