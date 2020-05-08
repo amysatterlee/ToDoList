@@ -8,7 +8,10 @@ const App: () => React$Node = () => {
   const [todos, setToDos] = useState(null);
 
   const addToList = (item) => {
-    DbHelper.add(item);
+    const cb = (success) => {
+      console.log(`Inserted to do - ${success}`);
+    }
+    DbHelper.add({'description': item}, cb);
   };
 
   const loadToDoList = () => {
