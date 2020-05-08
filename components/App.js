@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import ToDoForm from './ToDoForm';
-import ToastExample from './ToastExample';
+import ToastExample from '../javaHooks/ToastExample';
+import DbHelper from '../javaHooks/DbHelper';
 
 const App: () => React$Node = () => {
   const addToList = (item) => {
-    ToastExample.show(`you added ${item}`, "SHORT");
+    DbHelper.get("this is the DB Module now", ToastExample.SHORT);
   }
   return (
     <>
