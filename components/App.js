@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import ToDoForm from './ToDoForm';
-import ToastExample from '../javaHooks/ToastExample';
 import DbHelper from '../javaHooks/DbHelper';
 
 const App: () => React$Node = () => {
+  useEffect(() => { loadToDoList(); }, []);
+  const [todos, setToDos] = useState(null);
+
   const addToList = (item) => {
-    DbHelper.get("this is the DB Module now", ToastExample.SHORT);
-  }
+    DbHelper.add(item);
+  };
+
+  const loadToDoList = () => {
+    DbHelper.get((items) => {
+      setToDos(items);
+    });
+  };
+
   return (
     <>
       <View style={styles.pageLayout}>
