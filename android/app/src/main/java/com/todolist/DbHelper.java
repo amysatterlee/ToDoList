@@ -39,10 +39,7 @@ public class DbHelper extends SQLiteOpenHelper {
       SQLiteDatabase db = getReadableDatabase();
 
       String[] projection = DbContract.ToDoProjection;
-
-      // Filter results WHERE "title" = 'My Title'
-      // String selection = ToDoContract.ToDoEntry.COLUMN_NAME_STATUS + " = ?";
-      // String[] selectionArgs = { true };
+      String sort = DbContract.ToDoTable._ID + " ASC";
 
       Cursor cursor = db.query(
         DbContract.ToDoTable.NAME,   // The table to query
@@ -51,21 +48,9 @@ public class DbHelper extends SQLiteOpenHelper {
         null,          // selectionArgs The values for the WHERE clause
         null,                   // don't group the rows
         null,                   // don't filter by row groups
-        null                    // The sort order
+        sort                    // The sort order
       );
-
-      WritableArray returnArray = Arguments.createArray();
-      while(cursor.moveToNext()) {
-        WritableMap map = Arguments.createMap();
-        int id = cursor.getInt(
-            cursor.getColumnIndexOrThrow(DbContract.ToDoTable._ID));
-        String description = cursor.getString(
-            cursor.getColumnIndexOrThrow(DbContract.ToDoTable.COLUMN_DESCRIPTION));
-
-        map.putInt("id", id);
-        map.putString("description", description);
-        returnArray.pushMap(map);
-      }
+      WritableArray returnArray = DbContract.createArrayFromCursor(cursor);
       cursor.close();
 
       return returnArray;
@@ -73,10 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public boolean insertRecord(ReadableMap record) {
       SQLiteDatabase db = getWritableDatabase();
-      String description = record.getString(DbContract.ToDoTable.COLUMN_DESCRIPTION);
-      // Create a new map of values, where column names are the keys
-      ContentValues values = new ContentValues();
-      values.put(DbContract.ToDoTable.COLUMN_DESCRIPTION, description);
+      ContentValues values = DbContract.createContentValues(record);
 
       // Insert the new row, returning true if success (id > 0)
       long newRowId = db.insert(DbContract.ToDoTable.NAME, null, values);
