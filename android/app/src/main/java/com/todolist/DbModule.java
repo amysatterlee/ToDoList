@@ -8,7 +8,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Callback;
 
@@ -37,7 +36,7 @@ public class DbModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void add(ReadableMap record, Callback cb) {
     DbHelper dbHelper = new DbHelper(reactContext);
-    boolean saved = dbHelper.insertRecord(record);
+    int saved = dbHelper.insertRecord(record);
 
     cb.invoke(saved);
   }

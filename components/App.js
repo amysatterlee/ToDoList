@@ -7,17 +7,21 @@ const App: () => React$Node = () => {
   useEffect(() => { loadToDoList(); }, []);
   const [todos, setToDos] = useState(null);
 
-  const addToList = (item) => {
-    const cb = (success) => {
-      console.log(`Inserted to do - ${success}`);
+  const addToList = (description) => {
+    let dt = new Date();
+    const item = {
+      description: description,
+      status: 'TO DO',
+      created_at: dt.toString(),
+      updated_at: dt.toString()
     }
-    DbHelper.add({'description': item}, cb);
+    DbHelper.add(item, (res) => {
+      console.log(`To Do added - ${res}`);
+    });
   };
 
   const loadToDoList = () => {
     DbHelper.get((items) => {
-      console.log(typeof items);
-      console.log(items);
       items.forEach((it) => { console.log(it); })
       setToDos(items);
     });

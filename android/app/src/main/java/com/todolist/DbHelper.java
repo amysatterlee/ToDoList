@@ -8,9 +8,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.Arguments;
 import android.database.Cursor;
 
 public class DbHelper extends SQLiteOpenHelper {
@@ -56,13 +54,13 @@ public class DbHelper extends SQLiteOpenHelper {
       return returnArray;
     }
 
-    public boolean insertRecord(ReadableMap record) {
+    public int insertRecord(ReadableMap record) {
       SQLiteDatabase db = getWritableDatabase();
       ContentValues values = DbContract.createContentValues(record);
 
       // Insert the new row, returning true if success (id > 0)
       long newRowId = db.insert(DbContract.ToDoTable.NAME, null, values);
 
-      return (newRowId > 0);
+      return (int) newRowId;
     }
 }

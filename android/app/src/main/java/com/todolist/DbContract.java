@@ -23,7 +23,7 @@ public final class DbContract {
 
     public static final String[] ToDoProjection = {
         BaseColumns._ID,
-        ToDoTable.COLUMN_DESCRIPTION.
+        ToDoTable.COLUMN_DESCRIPTION,
         ToDoTable.COLUMN_STATUS,
         ToDoTable.COLUMN_CREATED,
         ToDoTable.COLUMN_UPDATED
