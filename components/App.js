@@ -1,28 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import ToDoForm from './ToDoForm';
+import ToDoIndex from './ToDoIndex';
 import DbHelper from '../javaHooks/DbHelper';
 
 const App: () => React$Node = () => {
   useEffect(() => { loadToDoList(); }, []);
   const [todos, setToDos] = useState(null);
+  const [inputValue, setValue] = useState('');
 
-  const addToList = (description) => {
-    let dt = new Date();
-    const item = {
-      description: description,
-      status: 'TO DO',
-      created_at: dt.toString(),
-      updated_at: dt.toString()
+  const changeInputValue = (val) => {
+    setValue(val);
+  };
+
+  const addToList = () => {
+    if (inputValue && inputValue.length > 0) {
+      let dt = new Date();
+      const item = {
+        description: inputValue,
+        status: 'active',
+        created_at: dt.toString(),
+        updated_at: dt.toString()
+      }
+      DbHelper.add(item, (res) => {
+        setValue('');
+        loadToDoList();
+      });
     }
-    DbHelper.add(item, (res) => {
-      console.log(`To Do added - ${res}`);
-    });
   };
 
   const loadToDoList = () => {
     DbHelper.get((items) => {
-      items.forEach((it) => { console.log(it); })
       setToDos(items);
     });
   };
@@ -30,7 +38,8 @@ const App: () => React$Node = () => {
   return (
     <>
       <View style={styles.pageLayout}>
-        <ToDoForm handleAdd={addToList}/>
+        <ToDoForm value={inputValue} handleChange={changeInputValue} handleAdd={addToList}/>
+        <ToDoIndex todos={todos}/>
       </View>
     </>
   );

@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, TextInput, Button } from 'react-native';
 
-const ToDoForm = ({ handleAdd }) => {
-  const [value, setValue] = useState();
-  const handleChange = (val) => {
-    setValue(val);
-  };
-  const handlePress = () => {
-    handleAdd(value);
-  };
+const ToDoForm = ({ value, handleChange, handleAdd }) => {
   return (
     <View>
       <TextInput onChangeText={handleChange}>{value}</TextInput>
-      <Button onPress={handlePress} title="Add to List"/>
+      <Button onPress={handleAdd} title="Add to List"/>
     </View>
   );
 };
