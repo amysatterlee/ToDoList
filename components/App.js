@@ -35,11 +35,26 @@ const App: () => React$Node = () => {
     });
   };
 
+  const updateToDoStatus = (todo, status) => {
+    console.log(`Updating to do ${todo._id} to ${status}`);
+    let dt = new Date();
+    let item = {
+      _id: todo._id,
+      status: status,
+      updated_at: dt.toString()
+    };
+    DbHelper.update(item, (res) => {
+      if (res > 0) {
+        loadToDoList();
+      }
+    });
+  }
+
   return (
     <>
       <View style={styles.pageLayout}>
         <ToDoForm value={inputValue} handleChange={changeInputValue} handleAdd={addToList}/>
-        <ToDoIndex todos={todos}/>
+        <ToDoIndex todos={todos} updateToDoStatus={updateToDoStatus}/>
       </View>
     </>
   );

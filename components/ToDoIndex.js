@@ -1,18 +1,16 @@
 import React from 'react';
 import { StyleSheet, FlatList, Text } from 'react-native';
+import ToDoItem from './ToDoItem';
 
-const ToDoIndex = ({ todos }) => {
+const ToDoIndex = ({ todos, updateToDoStatus }) => {
   const keyExtractor = (item, _idx) => (item._id.toString())
 
   const renderToDo = ({item}) => {
-    console.log(item);
-    return <Text id={item._id}>{item.description}</Text>;
+    return <ToDoItem item={item} updateStatus={updateToDoStatus}/>;
   };
-  const render = () => {
-    return <FlatList data={todos} renderItem={renderToDo} keyExtractor={keyExtractor}/>
-  };
+
   return (
-    <>{render()}</>
+    <><FlatList data={todos} renderItem={renderToDo} keyExtractor={keyExtractor}/></>
   );
 };
 

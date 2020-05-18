@@ -37,7 +37,15 @@ public class DbModule extends ReactContextBaseJavaModule {
   public void add(ReadableMap record, Callback cb) {
     DbHelper dbHelper = new DbHelper(reactContext);
     int saved = dbHelper.insertRecord(record);
+    // pass id of newly created record back to react via callback
+    cb.invoke(saved);
+  }
 
+  @ReactMethod
+  public void update(ReadableMap record, Callback cb) {
+    DbHelper dbHelper = new DbHelper(reactContext);
+    int saved = dbHelper.updateRecord(record);
+    // pass id of newly created record back to react via callback
     cb.invoke(saved);
   }
 }

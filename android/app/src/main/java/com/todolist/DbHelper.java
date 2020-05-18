@@ -63,4 +63,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
       return (int) newRowId;
     }
+
+    public int updateRecord(ReadableMap record) {
+      SQLiteDatabase db = getWritableDatabase();
+      ContentValues values = DbContract.createContentValues(record);
+
+      // Update row, returning true if success (id > 0)
+      long newRowId = db.update(DbContract.ToDoTable.NAME, values, "_id=" + record.getInt("_id"), null);
+
+      return (int) newRowId;
+    }
 }
