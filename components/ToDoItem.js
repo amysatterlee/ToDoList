@@ -14,13 +14,16 @@ const ToDoItem = ({item, updateStatus}) => {
   return (
     <View id={item._id} style={styles.view}>
       <Text style={determineTextStyle()}>{item.description}</Text>
-      <Switch
-        style={styles.toggle}
-        onValueChange={switchValueChange}
-        value={item.status === 'in progress'}
-        trackColor={{true: 'blue'}}
-        thumbColor={item.status === 'in progress' ? 'blue' : null}
-      />
+      <View style={styles.toggleView} >
+        <Switch
+          style={styles.toggle}
+          onValueChange={switchValueChange}
+          value={item.status === 'in progress'}
+          trackColor={{true: 'blue'}}
+          thumbColor={item.status === 'in progress' ? 'blue' : null}
+        />
+        <Text style={styles.toggleText}>{item.status === 'in progress' ? 'In Progress' : null}</Text>
+      </View>
     </View>
   );
 };
@@ -44,8 +47,13 @@ const styles = StyleSheet.create({
     color: 'blue',
     flex: 2
   },
-  toggle: {
-    flex: 1
+  toggleView: {
+    flex: 1,
+    flexDirection: 'column',
+    textAlign: 'center'
+  },
+  toggleText: {
+    textAlign: 'center'
   }
 })
 export default ToDoItem;

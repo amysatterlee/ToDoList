@@ -8,6 +8,7 @@ const App: () => React$Node = () => {
   useEffect(() => { loadToDoList(); }, []);
   const [todos, setToDos] = useState(null);
   const [inputValue, setValue] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const changeInputValue = (val) => {
     setValue(val);
@@ -30,21 +31,29 @@ const App: () => React$Node = () => {
   };
 
   const loadToDoList = () => {
+    setLoading(true);
     DbHelper.get((items) => {
+      setLoading(false);
       setToDos(items);
     });
   };
 
   const updateToDoStatus = (todo, status) => {
     console.log(`Updating to do ${todo._id} to ${status}`);
-    let dt = new Date();
-    let item = {
-      _id: todo._id,
-      status: status,
-      updated_at: dt.toString()
-    };
+    let updated_at = (new Date()).toString();
+    let item = {...todo, status, updated_at};
+    // update state before saving to database to avoid the delay in rendering the toggle
+    // if error updating state then show error and refresh list
+    const items = todos.map(todo => {
+      if (todo._id === item._id) {
+        return item;
+      }
+      return todo;
+    });
+    setToDos(items);
     DbHelper.update(item, (res) => {
-      if (res > 0) {
+      if (res <= 0) {
+        console.log(`DB Update result - ${res}`);
         loadToDoList();
       }
     });
@@ -54,7 +63,7 @@ const App: () => React$Node = () => {
     <>
       <View style={styles.pageLayout}>
         <ToDoForm value={inputValue} handleChange={changeInputValue} handleAdd={addToList}/>
-        <ToDoIndex todos={todos} updateToDoStatus={updateToDoStatus}/>
+        <ToDoIndex todos={todos} updateToDoStatus={updateToDoStatus} loading={loading}/>
       </View>
     </>
   );
